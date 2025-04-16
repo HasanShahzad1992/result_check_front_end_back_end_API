@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body{
+            display:flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: column;
+            align-content: flex-start;
+            background:  #f4f4f4;
+            font-family: Arial, sans-serif;
+            padding:20px;
+            color:#333;
+        }
+        #input_box_button_id{
+            margin-bottom: 30px;
+        }
+        #roll_text_box_id{
+            padding:10px;
+            border-radius:5px;
+            border:1px solid #ccc;
+            width: 300px;
+            font-size:16px;
+            margin-right: 10px;
+        }
+        #button_id{
+            padding:10px 20px;
+            border-radius:5px;
+            background: #3498db;
+            color: white;
+            border:none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #button_id:hover{
+            background: #2980b9;
+        }
+
+        #ID0{
+            border:solid black;
+            border-radius: 10px;
+            padding: 20px;
+            background: white;
+            width: 500px;
+            border: 2px solid #2c3e50;
+            margin-bottom: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        #ID1,#ID2,#ID3,#ID4,#ID5,#ID6,#ID7,#ID8{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .span_class{
+            font-weight: bold;
+            width: 200px;
+        }
+        .second_span_class{
+            text-align: center;
+        }
+        th{
+            border:1px solid #ccc;
+            padding:10px;
+            background: #3498db;
+            color: white;
+        }
+        td{
+            border: 1px solid #ccc;
+            text-align: center;
+            padding:10px;
+        }
+        table{
+            margin-top:20px;
+            border-collapse: collapse;
+            box-shadow: 0 0 8px rgba(0,0,0,0.5);
+        }
+
+
+    </style>
+</head>
+<body>
+<h1>
+    XII result
+</h1>
+<div id="input_box_button_id">
+    <input type="text" placeholder="write down your roll number" id="roll_text_box_id">
+    <input type="button" value="check_result" id="button_id">
+</div>
+
+<script>
+    let access_body_of_page=document.getElementsByTagName("body")[0]
+    let access_candidate_roll_number=document.getElementById("roll_text_box_id");
+    let access_button=document.getElementById("button_id");
+
+    access_button.addEventListener("click", async function(){
+        let data_to_be_sent={"roll_number":access_candidate_roll_number.value}
+        let url=" http://127.0.0.1:8000/receive_result_candidate";
+        let additional_data={
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data_to_be_sent)
+        }
+        let response=await fetch(url,additional_data);
+        let json_data=await response.json();
+        console.log(json_data);
+
+        let roll_number_of_student=json_data["roll_number"]
+        let candidate_name=json_data["name_of_candidate"]
+        let father_name=json_data["name_of_father"]
+        let total_marks=json_data["total_marks"]
+        let marks_obtained_by_student=json_data["marks_obtained_by_student"]
+        let overall_percentage=json_data["overall_percentage"]
+        let number_of_papers_cleared=json_data["papers_cleared"]
+        let overall_grade=json_data["overall_grade_of_candidate"]
+        let total_number_of_subjects=json_data["total_subjects"]
+        let marksheet_list_dict=json_data["marksheet"]
+        console.log(marksheet_list_dict)
+
+        let create_big_box_div=document.createElement("div");
+        create_big_box_div.id="ID0";
+
+        let create_roll_number_div=document.createElement("div");
+        create_roll_number_div.id="ID1"
+
+        let create_span=document.createElement("span");
+        create_span.innerHTML="Roll_number";
+        create_span.className="span_class";
+        let create_span_roll_number_border=document.createElement("span");
+        create_span_roll_number_border.className="second_span_class";
+        create_span_roll_number_border.style.border="solid red";
+        create_span_roll_number_border.style.width="200px";
+        create_span_roll_number_border.style.height="20px";
+        create_span_roll_number_border.innerHTML=roll_number_of_student
+        create_roll_number_div.append(create_span)
+        create_roll_number_div.append(create_span_roll_number_border)
+        create_big_box_div.append(create_roll_number_div)
+
+        let create_name_div=document.createElement("div");
+        create_name_div.id="ID2"
+
+        let create_span_name=document.createElement("span");
+        create_span_name.innerHTML="Name"
+        create_span_name.className="span_class";
+        let create_span_name_border=document.createElement("span");
+        create_span_name_border.className="second_span_class";
+        create_span_name_border.style.border="solid red";
+        create_span_name_border.style.width="200px";
+        create_span_name_border.style.height="20px";
+        create_span_name_border.innerHTML=candidate_name
+        create_name_div.append(create_span_name)
+        create_name_div.append(create_span_name_border)
+        create_big_box_div.append(create_name_div)
+
+        let create_father_div=document.createElement("div");
+        create_father_div.id="ID3"
+
+        let create_span_father=document.createElement("span");
+        create_span_father.innerHTML="Father name";
+        create_span_father.className="span_class";
+
+        let create_span_father_border=document.createElement("span");
+        create_span_father_border.className="second_span_class";
+        create_span_father_border.style.border="solid red";
+        create_span_father_border.style.width="200px";
+        create_span_father_border.style.height="20px";
+        create_span_father_border.innerHTML=father_name;
+        create_father_div.append(create_span_father);
+        create_father_div.append(create_span_father_border);
+        create_big_box_div.append(create_father_div);
+
+        let create_total_marks_div=document.createElement("div");
+        create_total_marks_div.id="ID4";
+
+        let create_total_marks_span=document.createElement("span");
+        create_total_marks_span.innerHTML="Total marks";
+        create_total_marks_span.className="span_class";
+        let create_span_total_marks_border=document.createElement("span");
+        create_span_total_marks_border.className="second_span_class";
+        create_span_total_marks_border.style.border="solid red";
+        create_span_total_marks_border.style.width="200px";
+        create_span_total_marks_border.style.height="20px";
+        create_span_total_marks_border.innerHTML=total_marks;
+        create_total_marks_div.append(create_total_marks_span);
+        create_total_marks_div.append(create_span_total_marks_border);
+        create_big_box_div.append(create_total_marks_div);
+
+
+        let create_obtained_marks_div=document.createElement("div");
+        create_obtained_marks_div.id="ID5";
+
+        let create_obtained_marks_span=document.createElement("span");
+        create_obtained_marks_span.innerHTML="Obtained marks";
+        create_obtained_marks_span.className="span_class";
+        let create_obtained_marks_border=document.createElement("span");
+        create_obtained_marks_border.className="second_span_class";
+        create_obtained_marks_border.style.border="solid red";
+        create_obtained_marks_border.style.width="200px";
+        create_obtained_marks_border.style.height="20px";
+        create_obtained_marks_border.innerHTML=marks_obtained_by_student;
+        create_obtained_marks_div.append(create_obtained_marks_span);
+        create_obtained_marks_div.append(create_obtained_marks_border);
+        create_big_box_div.append(create_obtained_marks_div);
+
+        let create_percentage_div=document.createElement("div");
+        create_percentage_div.id="ID6";
+
+        let create_percentage_span=document.createElement("span");
+        create_percentage_span.innerHTML="Percentage";
+        create_percentage_span.className="span_class";
+        let create_percentage_span_border=document.createElement("span");
+        create_percentage_span_border.className="second_span_class";
+        create_percentage_span_border.style.border="solid red";
+        create_percentage_span_border.style.width="200px";
+        create_percentage_span_border.style.height="20px";
+        create_percentage_span_border.innerHTML=overall_percentage;
+
+        create_percentage_div.append(create_percentage_span);
+        create_percentage_div.append(create_percentage_span_border);
+        create_big_box_div.append(create_percentage_div);
+
+        let create_grade_div=document.createElement("div");
+        create_grade_div.id="ID7";
+
+        let create_grade_span=document.createElement("span");
+        create_grade_span.innerHTML="Grade";
+        create_grade_span.className="span_class";
+        let create_grade_span_border=document.createElement("span");
+        create_grade_span_border.className="second_span_class";
+        create_grade_span_border.style.border="solid red";
+        create_grade_span_border.style.width="200px";
+        create_grade_span_border.style.height="20px";
+        create_grade_span_border.innerHTML=overall_grade;
+        create_grade_div.append(create_grade_span);
+        create_grade_div.append(create_grade_span_border);
+        create_big_box_div.append(create_grade_div);
+
+        let create_paper_cleared_div=document.createElement("div");
+        create_paper_cleared_div.id="ID8";
+
+        let create_paper_cleared_span=document.createElement("span");
+        create_paper_cleared_span.innerHTML="number of papers cleared";
+        create_paper_cleared_span.className="span_class";
+        let create_paper_cleared_border=document.createElement("span");
+        create_paper_cleared_border.className="second_span_class";
+        create_paper_cleared_border.style.border="solid red";
+        create_paper_cleared_border.style.width="200px";
+        create_paper_cleared_border.style.height="20px";
+        create_paper_cleared_border.innerHTML=number_of_papers_cleared;
+        create_paper_cleared_div.append(create_paper_cleared_span);
+        create_paper_cleared_div.append(create_paper_cleared_border);
+        create_big_box_div.append(create_paper_cleared_div);
+        access_body_of_page.append(create_big_box_div)
+
+
+        let create_second_big_box=document.createElement("div");
+        create_second_big_box.id="IE0";
+
+        let create_table_marks_sheet=document.createElement("table");
+
+        let create_thead=document.createElement("thead");
+        let create_thead_tr=document.createElement("tr");
+        let marksheet_headings=["serial_number","subject_title","total_marks_of_that_subject","obtained_marks_of_that_subject","grade_of_that_subject"]
+        for(let i=0;i<marksheet_headings.length;i=i+1){
+            let create_thead_th=document.createElement("th");
+            create_thead_th.innerHTML=marksheet_headings[i];
+            create_thead_tr.append(create_thead_th);
+        }
+        create_thead.append(create_thead_tr);
+        create_table_marks_sheet.append(create_thead);
+        access_body_of_page.append(create_table_marks_sheet)
+
+        let create_tbody=document.createElement("tbody");
+        for(let i=0;i<total_number_of_subjects;i=i+1){
+            let create_tbody_tr=document.createElement("tr");
+            for(let j=0;j<marksheet_headings.length;j=j+1){
+                let create_tbody_td=document.createElement("td");
+                create_tbody_td.innerHTML=marksheet_list_dict[i][marksheet_headings[j]]
+                create_tbody_tr.append(create_tbody_td)
+            }
+            create_tbody.append(create_tbody_tr)
+        }
+        create_table_marks_sheet.append(create_tbody)
+        access_body_of_page.append(create_table_marks_sheet)
+
+    });
+</script>
+</body>
+</html>
